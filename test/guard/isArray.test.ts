@@ -12,11 +12,12 @@ describe('isArray 함수', () => {
   it('배열이 아닌 경우 false를 반환한다', () => {
     expect(isArray({})).toBe(false)
     expect(isArray('string')).toBe(false)
-    expect(isArray(42)).toBe(false)
+    expect(isArray(921831729)).toBe(false)
     expect(isArray(true)).toBe(false)
     expect(isArray(null)).toBe(false)
     expect(isArray(undefined)).toBe(false)
     expect(isArray(() => {})).toBe(false)
+     expect(isArray(new Set([1, 2, 3]))).toBe(false);
   })
 
   it('유사 배열 객체의 경우 false를 반환한다', () => {
