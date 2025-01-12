@@ -58,50 +58,41 @@ export function isEmpty(data: unknown) {
     if (typeof data === 'string') {
         return data.trim() === '';
     }
-
-    if (Array.isArray(data)) {
-        return data.length === 0;
+    if (typeof data === 'symbol') {
+        return false;
+    }    
+    // 함수는 비어있지 않은 것으로 처리
+    if (typeof data === 'function') {
+        return false;
     }
 
-    if (typeof data === 'object') {
-        return Object.keys(data).length === 0;
-    }
-
-    if (data instanceof Set || data instanceof Map) {
-        return data.size === 0;
-    }
 
     // WeakMap과 WeakSet은 .size를 지원하지 않아서 비어있는지 확인 불가
     // => 비어있지 않은 것으로 처리하여 항상 false를 반환
     if (data instanceof WeakSet || data instanceof WeakMap) {
         return false;
     }
-
-    if (typeof data === 'symbol') {
-        return false;
-    }
-
     // Promise는 항상 상태를 가지므로 비어있지 않음
     if (data instanceof Promise) {
         return false; 
     }
-
-    if (data instanceof Date) {
-        return isNaN(data.getTime());
-    }
-
     // RegExp는 항상 패턴을 가지므로 비어있지 않음
     if (data instanceof RegExp) {
         return data.source === '(?:)';
+    }    
+    if (data instanceof Date) {
+        return isNaN(data.getTime());
     }
-
     if (data instanceof Error) {
         return data.message === '';
     }
+    // Set과 Map 체크 - 객체 체크보다 먼저 수행해야 함
+    if (data instanceof Set || data instanceof Map) {
+        return data.size === 0;
+    }
 
-    // 함수는 비어있지 않은 것으로 처리
-    if (typeof data === 'function') {
-        return false;
+    if (Array.isArray(data)) {
+        return data.length === 0;
     }
 
     // Node.js Buffer 체크
@@ -113,7 +104,13 @@ export function isEmpty(data: unknown) {
     if (typeof Blob !== 'undefined' && data instanceof Blob) {
         return data.size === 0;
     }
+    //일반 객체 체크를 마지막에 수행
+    if (typeof data === 'object') {
+        return Object.keys(data).length === 0;
+    }
 
     // 기타 나머지는 비어있지 않은 것으로 처리
     return false;
 }
+
+
