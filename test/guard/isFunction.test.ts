@@ -24,6 +24,14 @@ describe('isFunction', () => {
     // 내장 함수
     expect(isFunction(setTimeout)).toBe(true);
     expect(isFunction(console.log)).toBe(true);
+
+    // 비동기 함수
+    async function asyncFunction() {}
+    expect(isFunction(asyncFunction)).toBe(true);
+
+    // 제너레이터 함수
+    function* generatorFunction() {}
+    expect(isFunction(generatorFunction)).toBe(true);
   });
 
   it('함수가 아닌 값이 전달되면 false를 반환해야 한다', () => {
